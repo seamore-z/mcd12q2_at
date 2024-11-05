@@ -1,0 +1,54 @@
+# Makefile for Ubuntu 14.04. Includes both debug and release targets with
+# compiler options suitable for development and production, respectively. 
+#
+# Known dependencies, which can be installed through apt-get, are:
+# 	libhdf4-dev
+#
+# #
+
+# user-defined parameters
+CC = gcc
+CFLAGS_DEBUG = -g -Wall -Wextra -Werror
+CFLAGS_RELEASE = -O3
+LDFLAGS = -lmfhdf -ldf -lm 
+INCLUDE = 
+SDIR = ./src_new
+BDIR = ./build
+EDIR = ./bin
+EXE = modis_smooth_t
+
+# automatically-defined variables
+SRC = $(wildcard $(SDIR)/*.c)
+OBJ = $(patsubst $(SDIR)/%.c, $(BDIR)/%.o, $(SRC))
+
+# clear implicit rules, protect 'clean' target
+.SUFFIXES: 
+.SUFFIXES: .o .c
+.PHONY: release debug clean 
+
+# build type targets
+debug: CFLAGS = $(CFLAGS_DEBUG)
+debug: $(EDIR)/$(EXE) ;
+
+release: CFLAGS = $(CFLAGS_RELEASE)
+release: $(EDIR)/$(EXE) ; 
+
+# executable 
+$(EDIR)/$(EXE): $(OBJ) | $(EDIR)  
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+
+# pattern rule for C sources, all files depend on shared header
+$(BDIR)/%.o: $(SDIR)/%.c $(SDIR)/modis_smooth_t.h | $(BDIR)
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+# create directories if needed
+$(BDIR): 
+	mkdir -p $(BDIR)
+
+$(EDIR):
+	mkdir -p $(EDIR)
+
+# delete build files and executable
+clean: 
+	-rm -f $(BDIR)/*
+	-rm -f $(EDIR)/$(EXE) 

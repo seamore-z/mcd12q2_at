@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+in_dir="/projectnb/modislc/users/dsm/spline_codes/spline_one_v3/outputs_test2"
+in_stem="c6_str8_0.5t"
+tile="h12v04"
+year=2004
+
+
+for p in `cat pix_file.txt`;
+do
+
+qsub -V read_spline_dat.sh $in_stem $in_dir $year $tile $p
+
+done 

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for t in `cat tiles.txt`;
+do
+
+qsub run_spline.sh $t
+
+# end tile loop
+done
