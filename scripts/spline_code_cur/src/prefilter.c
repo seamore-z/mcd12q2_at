@@ -296,7 +296,7 @@ static void prefilter_evi2(size_t num_pix, int num_years, int stride, int16 *evi
 
 			    // ## special fill for 2 month gaps in the data record with no snow in between
 			    // ## to fill that gap we need to ensure it is during a winter month - so we use the tmin climatology
-			    if(gap_len>(MODIS_PERIOD/12) && //last_val == KIND_NSNOW_OBS_MIN &&
+			    if(gap_len>(MODIS_PERIOD/18) && //last_val == KIND_NSNOW_OBS_MIN &&
 				    ((day % stride)==0) && (tmin[cur_mon][pix] < tmin_thres) && (tmin[cur_mon][pix] != FILL_NBAR)) 
                 {
 				    evi2[ii] = day_floor[step];
