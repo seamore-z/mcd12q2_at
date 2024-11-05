@@ -60,9 +60,9 @@ echo "Starting processing for $in_tile for output year $first_yr."
 #	echo "No outputs for tile $in_tile. Will process"
 
 	# echo ../modis_smooth_t/bin/modis_smooth_t --tile_id $in_tile --chunk $chunk_size --smooth 1,2,4,5,6,7,8 --prefilter 8 --residual 8 --quantile $quant_flag --start_year $start_yr --num_yrs $num_yrs --stride $stride --out_stem $out_stem --out_dir $out_dir --nbar_dir $nbar_dir --qa_dir $qa_dir --extract_path $extract_path
-	echo /projectnb/modislc/users/seamorez/MCD12Q2/scripts/spline_code_cur/bin/modis_smooth_t --tile_id $in_tile --chunk $chunk_size --smooth 1,2,4,5,6,7,8 --prefilter 8 --residual 8 --quantile $quant_flag --start_year $start_yr --num_yrs $num_yrs --stride $stride --out_stem $out_stem --out_dir $out_dir --nbar_dir $nbar_dir --qa_dir $qa_dir --extract_path $extract_path
+	echo /projectnb/modislc/users/seamorez/mcd12q2_at/scripts/spline_code_cur/bin/modis_smooth_t --tile_id $in_tile --chunk $chunk_size --smooth 1,2,4,5,6,7,8 --prefilter 8 --residual 8 --quantile $quant_flag --start_year $start_yr --num_yrs $num_yrs --stride $stride --out_stem $out_stem --out_dir $out_dir --nbar_dir $nbar_dir --qa_dir $qa_dir --extract_path $extract_path
 	# ../modis_smooth_t/bin/modis_smooth_t --tile_id $in_tile --chunk $chunk_size --smooth 1,2,4,5,6,7,8 --prefilter 8 --residual 8 --quantile $quant_flag --start_year $start_yr --num_yrs $num_yrs --stride $stride --out_stem $out_stem --out_dir $out_dir --nbar_dir $nbar_dir  --qa_dir $qa_dir --extract_path $extract_path
-	/projectnb/modislc/users/seamorez/MCD12Q2/scripts/spline_code_cur/bin/modis_smooth_t --tile_id $in_tile --chunk $chunk_size --smooth 1,2,4,5,6,7,8 --prefilter 8 --residual 8 --quantile $quant_flag --start_year $start_yr --num_yrs $num_yrs --stride $stride --out_stem $out_stem --out_dir $out_dir --nbar_dir $nbar_dir  --qa_dir $qa_dir --extract_path $extract_path
+	/projectnb/modislc/users/seamorez/mcd12q2_at/scripts/spline_code_cur/bin/modis_smooth_t --tile_id $in_tile --chunk $chunk_size --smooth 1,2,4,5,6,7,8 --prefilter 8 --residual 8 --quantile $quant_flag --start_year $start_yr --num_yrs $num_yrs --stride $stride --out_stem $out_stem --out_dir $out_dir --nbar_dir $nbar_dir  --qa_dir $qa_dir --extract_path $extract_path
 #fi 
 
 echo "Now finished processing tile $in_tile."

@@ -59,7 +59,7 @@
 # prelims
 library(parallel)
 library(argparse)
-source("/projectnb/modislc/users/seamorez/MCD12Q2/MCD12Q2C6_AnnualPhenologyFunctions.R")
+source("/projectnb/modislc/users/seamorez/mcd12q2_at/MCD12Q2C6_AnnualPhenologyFunctions.R")
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # parse the command line arguments
@@ -104,7 +104,7 @@ print(paste("Processing tile", args$tile, "for year", args$year))
 # set up the cluster
 cl <- makeCluster(args$cluster_size)
 # NOTE: not sure if this next line is necessary...
-clusterEvalQ(cl, {source("/projectnb/modislc/users/seamorez/MCD12Q2/MCD12Q2C6_AnnualPhenologyFunctions.R")})
+clusterEvalQ(cl, {source("/projectnb/modislc/users/seamorez/mcd12q2_at/MCD12Q2C6_AnnualPhenologyFunctions.R")})
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # get all data files for tile

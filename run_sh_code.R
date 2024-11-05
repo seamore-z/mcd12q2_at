@@ -6,8 +6,8 @@ tiles <- c('h10v02')  # Test tile 1
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/e4ftl01.cr.usgs.gov/')
 for(i in seq(length(tiles))){
   for(year in 2016:2023){
-    system(paste('qsub -N NB2',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/MCD12Q2/run_nbara2.sh ', tiles[i],year,sep=''))
-    system(paste('qsub -N NB4',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/MCD12Q2/run_nbara4.sh ', tiles[i],year,sep=''))
+    system(paste('qsub -N NB2',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
+    system(paste('qsub -N NB4',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
   }  
 }
 
@@ -16,8 +16,8 @@ for(i in seq(length(tiles))){
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/e4ftl01.cr.usgs.gov/')
 for(i in seq(length(tiles))){
   for(year in 2016:2023){
-    system(paste('qsub -N om2_',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/MCD12Q2/run_nbara2_omit.sh ', tiles[i],year,sep=''))
-    system(paste('qsub -N om4_',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/MCD12Q2/run_nbara4_omit.sh ', tiles[i],year,sep=''))
+    system(paste('qsub -N om2_',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2_omit.sh ', tiles[i],year,sep=''))
+    system(paste('qsub -N om4_',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4_omit.sh ', tiles[i],year,sep=''))
   }
 }
 
@@ -25,7 +25,7 @@ for(i in seq(length(tiles))){
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/')
 for(i in seq(length(tiles))){
   for(year in 2016:2023){
-    system(paste('qsub -N cfld',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/MCD12Q2/run_change_folder.sh ', tiles[i], year,sep=''))
+    system(paste('qsub -N cfld',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_change_folder.sh ', tiles[i], year,sep=''))
   }
 }
 
@@ -38,7 +38,7 @@ for(i in seq(length(tiles))){
   for(start_yr in 2015:2022){
     outDir <- paste0('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/',tiles[i],'/',(start_yr+1))
     if (!dir.exists(outDir)) {dir.create(outDir)}
-    system(paste('qsub /projectnb/modislc/users/seamorez/MCD12Q2/run_spline_fromJosh.sh ', tiles[i],' ',start_yr,sep=''))    
+    system(paste('qsub /projectnb/modislc/users/seamorez/mcd12q2_at/run_spline_fromJosh.sh ', tiles[i],' ',start_yr,sep=''))    
   }
 }
 
@@ -48,7 +48,7 @@ setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/splin
 for(i in seq(length(tiles))){
   for(year in 2016:2023){
     for(j in 0:0){
-      system(paste('qsub -N ck_sp -V -pe omp 4 -l h_rt=03:00:00 -l mem_total=32G /projectnb/modislc/users/seamorez/MCD12Q2/run_ck_spline.sh ',tiles[i],year,j,sep=''))  
+      system(paste('qsub -N ck_sp -V -pe omp 4 -l h_rt=03:00:00 -l mem_total=32G /projectnb/modislc/users/seamorez/mcd12q2_at/run_ck_spline.sh ',tiles[i],year,j,sep=''))  
     }
   }  
 }
@@ -61,7 +61,7 @@ for(i in seq(length(tiles))){
   # outDir <- paste0('/projectnb/modislc/users/mkmoon/LCD_C6/v7/pheno/bu/',tiles[i],'/')
   # if (!dir.exists(outDir)) {dir.create(outDir)}
   for(year in 2016:2023){
-    system(paste('qsub -V -pe omp 16 -l h_rt=06:00:00 -l mem_total=98G /projectnb/modislc/users/seamorez/MCD12Q2/MCD12Q2C6_subAnnualPhenology.sh ',tiles[i],' ',year,sep=''))  
+    system(paste('qsub -V -pe omp 16 -l h_rt=06:00:00 -l mem_total=98G /projectnb/modislc/users/seamorez/mcd12q2_at/MCD12Q2C6_subAnnualPhenology.sh ',tiles[i],' ',year,sep=''))  
   }
 }
 
