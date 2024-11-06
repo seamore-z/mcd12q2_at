@@ -192,12 +192,20 @@ static void prefilter_evi2(size_t num_pix, int num_years, int stride, int16 *evi
 			    // ## in that case ignore it
 				// JMG July, 2019: if the current min is greater than 175% of the previous min then we assign the previous min?
 				// that doesn't seem right...
-			    yr_quant_min = ((double)yr_quant_1/(double)prev_snow_fill[pix] > 1.75) ? prev_snow_fill[pix] : yr_quant_1;
-			    
-			    // ## testing a new conditional: replace default min value when the previous is not the default
-			    if(yr_quant_min==EVI2_FLOOR_DEFAULT && prev_snow_fill[pix]!=EVI2_FLOOR_DEFAULT)
-			    {yr_quant_min = prev_snow_fill[pix];
-			     }
+				  if(prev_snow_fill[pix]==EVI2_FLOOR_DEFAULT)
+				  {
+				    yr_quant_min = ((double)yr_quant_1/(double)prev_snow_fill[pix] > 1.75) ? prev_snow_fill[pix] : yr_quant_1;
+				   }
+				  else
+				  {
+				    yr_quant_min = ((double)yr_quant_1/(double)prev_snow_fill[pix] > 1.25) ? prev_snow_fill[pix] : yr_quant_1;
+				    
+				    // ## testing a new conditional: replace default min value when the previous is not the default
+				    if(yr_quant_min==EVI2_FLOOR_DEFAULT)
+				    {
+				      yr_quant_min = prev_snow_fill[pix];
+				    }
+				  }
 		
 			    // ## fill the new years' minimums with the current quantile value
 			    for (yr = q_start; yr < num_years; yr++) {
