@@ -26,13 +26,11 @@ rast_obj <- rast(files[1])
 subdatasets <- names(rast_obj)
 test <- raster(rast_obj[subdatasets[1]])
 
-# x <- -163.25640; y_orig <- 61.30227 64.919067,-166.376788
-x <- -166.376788; y_orig <- 64.919067
-# x <- -162.655197; y_orig <- 60.923207
-# x <- -166.375628; y_orig <- 64.981045
-# x <- -166.358837; y_orig <- 64.893833
-# x <- -165.414587; y_orig <- 64.743895
-
+# x <- -166.376788; y_orig <- 64.919067 # 64.919067,-166.376788 # shrubby pixel for test #1
+# x <- -164.056401; y_orig <- 62.531442 # 62.531442,-164.056401 # veg pixel for test #2: default EVImin pixel 1
+# x <- -164.939950; y_orig <- 64.556637 # 64.556637,-164.939950 # veg+water pixel for test #2: default EVImin pixel 2
+# x <- -161.412684; y_orig <- 60.919210 # 60.919210,-161.412684 # shrubby pixel for test #2: default EVImin pixel 3
+x <- -164.405038; y_orig <- 61.306337 # 61.306337,-164.405038 # a lot of water pixel for test #2: default EVImin pixel 4
 points <- cbind(x,y_orig)
 v <- SpatialPoints(points, proj4string = CRS("+proj=longlat +datum=WGS84"))
 y <- spTransform(v, CRS("+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs"))
@@ -86,7 +84,7 @@ for(i in 1:365){
 
 
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/spline_test/')
-png(file=paste('sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'.png',sep=''),res=300,units='in',width=13.5,height=6.5)
+png(file=paste('d_sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'.png',sep=''),res=300,units='in',width=13.5,height=6.5)
 par(oma=c(1,1,1,1),mar=c(4,4,0,0))
 plot(splined[,1]/10000,ylim=c(-0.2,0.8),
      xlab='Date',ylab='EVI2',lwd=1.5,
@@ -95,7 +93,7 @@ points(evi_mm,col='red',cex=.5)
 dev.off()
 
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/spline_test/')
-png(file=paste('sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'_ndsi','.png',sep=''),res=300,units='in',width=13.5,height=6.5)
+png(file=paste('d_sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'_ndsi','.png',sep=''),res=300,units='in',width=13.5,height=6.5)
 par(oma=c(1,1,1,1),mar=c(4,4,0,0))
 plot(splined[,1]/10000,ylim=c(-0.8,1.1),
      xlab='Date',ylab='NDSI',lwd=1.5,
@@ -104,39 +102,39 @@ points(ndsi_mm,col='blue',cex=.5)
 dev.off()
 
 
-## Testing spline smoothing param spar ##
-## Note: no weights on this spline     ##
-evi_dd <- matrix(NA,365,1)
-for(i in 1:365){
-  if (!is.na(ndsi_mm[i, 1]) && ndsi_mm[i,1] < -0.3) {
-    evi_dd[i,1] <- evi_mm[i,1]
-  } else {
-    #if (!is.na(evi_mm[i,1]) && evi_mm[i,1] < 0.3) {
-      #evi_dd[i,1] <- 0.15
-    #}
-  }
-}
-evi_dd_qa <- evi_dd[evi_dd!=0.1500000]; evi_dd_qa <- evi_dd_qa[!is.na(evi_dd_qa)]
-evi_min <- quantile(evi_dd_qa, probs = 0.10)
-if (evi_min>0.15) {
-  evi_dd[evi_dd==0.15] <- evi_min
-}
-  
-dates <- c(1:365)
-dates[is.na(evi_dd)] <- NA
-dates <- na.omit(dates)
-evi_dd <- na.omit(evi_dd)
-
-spl <- smooth.spline(dates, evi_dd, spar=.55)
-
-pred_dates <- seq(1,365,length.out = 365)
-xSmooth <- predict(spl, as.numeric(pred_dates))$y
-
-setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/spline_test/')
-png(file=paste('sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'_tspine','.png',sep=''),res=300,units='in',width=13.5,height=6.5)
-par(oma=c(1,1,1,1),mar=c(4,4,0,0))
-plot(pred_dates, xSmooth,ylim=c(0,0.8),
-     xlab='Date',ylab='EVI2',lwd=1.5,
-     cex.lab=1.3,type='l')
-points(dates, evi_dd,col='green',cex=.5)
-dev.off()
+# ## Testing spline smoothing param spar ##
+# ## Note: no weights on this spline     ##
+# evi_dd <- matrix(NA,365,1)
+# for(i in 1:365){
+#   if (!is.na(ndsi_mm[i, 1]) && ndsi_mm[i,1] < -0.3) {
+#     evi_dd[i,1] <- evi_mm[i,1]
+#   } else {
+#     #if (!is.na(evi_mm[i,1]) && evi_mm[i,1] < 0.3) {
+#       #evi_dd[i,1] <- 0.15
+#     #}
+#   }
+# }
+# evi_dd_qa <- evi_dd[evi_dd!=0.1500000]; evi_dd_qa <- evi_dd_qa[!is.na(evi_dd_qa)]
+# evi_min <- quantile(evi_dd_qa, probs = 0.10)
+# if (evi_min>0.15) {
+#   evi_dd[evi_dd==0.15] <- evi_min
+# }
+#   
+# dates <- c(1:365)
+# dates[is.na(evi_dd)] <- NA
+# dates <- na.omit(dates)
+# evi_dd <- na.omit(evi_dd)
+# 
+# spl <- smooth.spline(dates, evi_dd, spar=.55)
+# 
+# pred_dates <- seq(1,365,length.out = 365)
+# xSmooth <- predict(spl, as.numeric(pred_dates))$y
+# 
+# setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/spline_test/')
+# png(file=paste('sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'_tspine','.png',sep=''),res=300,units='in',width=13.5,height=6.5)
+# par(oma=c(1,1,1,1),mar=c(4,4,0,0))
+# plot(pred_dates, xSmooth,ylim=c(0,0.8),
+#      xlab='Date',ylab='EVI2',lwd=1.5,
+#      cex.lab=1.3,type='l')
+# points(dates, evi_dd,col='green',cex=.5)
+# dev.off()
