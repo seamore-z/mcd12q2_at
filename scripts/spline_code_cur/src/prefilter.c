@@ -190,9 +190,9 @@ static void prefilter_evi2(size_t num_pix, int num_years, int stride, int16 *evi
 
 			    // ## check to make sure the current min is not a large increase relative to the previous year min 
 			    // ## in that case ignore it
-				// JMG July, 2019: if the current min is greater than 125% of the previous min then we assign the previous min?
+				// JMG July, 2019: if the current min is greater than 175% of the previous min then we assign the previous min?
 				// that doesn't seem right...
-			    yr_quant_min = ((double)yr_quant_1/(double)prev_snow_fill[pix] > 1.25) ? prev_snow_fill[pix] : yr_quant_1;
+			    yr_quant_min = ((double)yr_quant_1/(double)prev_snow_fill[pix] > 1.75) ? prev_snow_fill[pix] : yr_quant_1;
 		
 			    // ## fill the new years' minimums with the current quantile value
 			    for (yr = q_start; yr < num_years; yr++) {
@@ -294,7 +294,7 @@ static void prefilter_evi2(size_t num_pix, int num_years, int stride, int16 *evi
 				    gap_len++;
 			     }
 
-			    // ## special fill for 2 month gaps in the data record with no snow in between
+			    // ## special fill for 20 day gaps in the data record with no snow in between
 			    // ## to fill that gap we need to ensure it is during a winter month - so we use the tmin climatology
 			    if(gap_len>(MODIS_PERIOD/18) && //last_val == KIND_NSNOW_OBS_MIN &&
 				    ((day % stride)==0) && (tmin[cur_mon][pix] < tmin_thres) && (tmin[cur_mon][pix] != FILL_NBAR)) 
