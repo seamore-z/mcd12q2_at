@@ -1,30 +1,50 @@
-# Get NBAR data
-tiles <- c('h10v02')  # Test tile 1
-# tiles <- c('h07v03','h08v03','h09v02','h09v03','h10v02','h10v03','h11v02',
-#            'h12v01','h12v02','h13v01','h13v02')  # AK Tundra tiles
+tiles <- c('h11v02')  # Download one tile at a time
 
+# Get MCD43A4 NBAR data
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/e4ftl01.cr.usgs.gov/')
 for(i in seq(length(tiles))){
-  for(year in 2016:2023){
-    system(paste('qsub -N NB2',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
-    system(paste('qsub -N NB4',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
+  for(year in 2000:2024){
+    # If first yr, run job
+    if (year == 2000) {
+      #system(paste('qsub -N NB4',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
+      system(paste('qsub -N NB4',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
+    }
+    # Else, hold until previous job complete (this is slower than the old method, but it doesn't 
+    # overwhelm the server. This way, usually no downloads are skipped.)
+    else {
+      prev_yr = year-1
+      #system(paste('qsub -N NB4',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
+      system(paste('qsub -N NB4',tiles[i],'_',year,' -hold_jid NB4',tiles[i],'_',prev_yr,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
+    }
+  }  
+}
+
+# Get MCD43A2 NBAR data
+setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/e4ftl01.cr.usgs.gov/')
+for(i in seq(length(tiles))){
+  for(year in 2000:2024){
+    # If first yr, run job
+    if (year == 2000) {
+      #system(paste('qsub -N NB2',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
+      system(paste('qsub -N NB2',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
+    }
+    # Else, hold until previous job complete (this is slower than the old method, but it doesn't 
+    # overwhelm the server. This way, usually no downloads are skipped.)
+    else {
+      prev_yr = year-1
+      #system(paste('qsub -N NB2',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
+      system(paste('qsub -N NB2',tiles[i],'_',year,' -hold_jid NB2',tiles[i],'_',prev_yr,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
+    }
   }  
 }
 
 
-# Get NBAR omitted
-setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/e4ftl01.cr.usgs.gov/')
-for(i in seq(length(tiles))){
-  for(year in 2016:2023){
-    system(paste('qsub -N om2_',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2_omit.sh ', tiles[i],year,sep=''))
-    system(paste('qsub -N om4_',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4_omit.sh ', tiles[i],year,sep=''))
-  }
-}
+tiles <- c('h11v02', 'h12v02')  # After downloading, we can run tasks in parallel for all tiles
 
 # Run "change_folder_name.R" code
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/')
 for(i in seq(length(tiles))){
-  for(year in 2016:2023){
+  for(year in 2000:2024){
     system(paste('qsub -N cfld',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_change_folder.sh ', tiles[i], year,sep=''))
   }
 }
@@ -35,7 +55,7 @@ for(i in seq(length(tiles))){
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/')
 for(i in seq(length(tiles))){
   #Create output directory if it doesn't exist
-  for(start_yr in 2015:2022){
+  for(start_yr in 2000:2022){
     outDir <- paste0('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/',tiles[i],'/',(start_yr+1))
     if (!dir.exists(outDir)) {dir.create(outDir)}
     system(paste('qsub /projectnb/modislc/users/seamorez/mcd12q2_at/run_spline_fromJosh.sh ', tiles[i],' ',start_yr,sep=''))    
@@ -46,7 +66,7 @@ for(i in seq(length(tiles))){
 # To see splined results
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/log/')
 for(i in seq(length(tiles))){
-  for(year in 2016:2023){
+  for(year in 2022:2023){
     for(j in 0:0){
       system(paste('qsub -N ck_sp -V -pe omp 4 -l h_rt=03:00:00 -l mem_total=32G /projectnb/modislc/users/seamorez/mcd12q2_at/run_ck_spline.sh ',tiles[i],year,j,sep=''))  
     }
@@ -60,7 +80,7 @@ for(i in seq(length(tiles))){
   #Create output directory if it doesn't exist
   # outDir <- paste0('/projectnb/modislc/users/mkmoon/LCD_C6/v7/pheno/bu/',tiles[i],'/')
   # if (!dir.exists(outDir)) {dir.create(outDir)}
-  for(year in 2016:2023){
+  for(year in 2001:2023){
     system(paste('qsub -V -pe omp 16 -l h_rt=06:00:00 -l mem_total=98G /projectnb/modislc/users/seamorez/mcd12q2_at/MCD12Q2C6_subAnnualPhenology.sh ',tiles[i],' ',year,sep=''))  
   }
 }
