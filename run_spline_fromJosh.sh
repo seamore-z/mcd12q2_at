@@ -25,13 +25,13 @@ echo "Writing to local disk on $TMPDIR"
 out_year=$(($2+1))
 out_dir="/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/$in_tile"
 ## name for the outputs will start with this string
-out_stem="sz_v5"
+out_stem="sz_v7"
 
 ## where the step extract is held - optional
 # extract_path="/projectnb/modislc/users/dsm/spline_codes/spline_one_v3/run_dir/all_step.csv"
 extract_path="NONE"
 ## we don't read in every day of inputs instead this number is used to determine every nth observation we will read in 
-stride=5
+stride=3
 ## the number of rows read in at one time - this will greatly impact the memory usage of the process 
 ## a chunk of 800 will use about 75GB of memory, a chunk of 600 will use about 55GB of memory, etc
 chunk_size=600
