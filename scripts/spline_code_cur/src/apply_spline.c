@@ -52,7 +52,7 @@ void apply_spline(config pp, int16 **data, uint8 **qa, int16 **residual) {
     ispar = 1;
     lspar = -1.5;
      // ## very important smoothing parameter - larger number means more smoothing
-    spar = 0.55;
+    spar = 0.4;
     ld4 = 4;
 
     // main loop, spline each pixel in each layer 
