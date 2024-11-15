@@ -174,7 +174,7 @@ static void prefilter_evi2(size_t num_pix, int num_years, int stride, int16 *evi
 		    // ## returns a value indicating a low quantile of the snow-free evi2 data for that pixel to be used as a snow-fill
 		    yr_quant_1 = masked_quantile(evi2 + yr_start, ndsi + yr_start, yr_count, EVI2_FLOOR_QUANT, EVI2_FLOOR_DEFAULT); 
 		    // ## also calculate the maximum quantile
-		    yr_quant_max = masked_quantile(evi2 + yr_start, ndsi + yr_start, yr_count, (1-EVI2_FLOOR_QUANT), EVI2_FLOOR_DEFAULT); 
+		    yr_quant_max = masked_quantile(evi2 + yr_start, ndsi + yr_start, yr_count, (1-0.05), EVI2_FLOOR_DEFAULT); 
 
 		    // ## now we assign this minimum quantile to each year in the series
 		    // ## first look at previously splined values for the first year in the series
@@ -289,7 +289,14 @@ static void prefilter_evi2(size_t num_pix, int num_years, int stride, int16 *evi
                         evi2[ii] = day_floor[step];
                         kind[ii] = KIND_NSNOW_OBS_MIN;
                     }
-                 
+            // ## new special case 11/15/24 if ndsi not available but the evi2 value is lower than the period minimum
+                    // ## during a period of potential snow will fill with special min flag
+                    if (ndsi[ii] == FILL_NBAR && evi2[ii] < day_floor[step])
+                    {
+                        evi2[ii] = day_floor[step];
+                        kind[ii] = KIND_NSNOW_OBS_MIN;
+                    }
+                    
 				     // ## new special case 7/11/16 if the evi is higher than the normal ceiling but its during a winter month
 				     // ## current observation is unreliable and probably snow
 				     if (ndsi[ii] < NDSI_THRESHOLD_MAX && evi2[ii] >= day_ceil[step] && ndsi[ii] != FILL_NBAR) 
