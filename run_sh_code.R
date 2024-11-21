@@ -1,4 +1,4 @@
-tiles <- c('h11v02')  # Download one tile at a time
+tiles <- c('h09v02')  # Download one tile at a time
 
 # Get MCD43A4 NBAR data
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/e4ftl01.cr.usgs.gov/')
@@ -7,7 +7,7 @@ for(i in seq(length(tiles))){
     # If first yr, run job
     if (year == 2000) {
       #system(paste('qsub -N NB4',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
-      system(paste('qsub -N NB4',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
+      system(paste('qsub -N NB4',tiles[i],'_',year,' -hold_jid NB2h07v03','_2024',' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara4.sh ', tiles[i],year,sep=''))
     }
     # Else, hold until previous job complete (this is slower than the old method, but it doesn't 
     # overwhelm the server. This way, usually no downloads are skipped.)
@@ -26,7 +26,7 @@ for(i in seq(length(tiles))){
     # If first yr, run job
     if (year == 2000) {
       #system(paste('qsub -N NB2',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
-      system(paste('qsub -N NB2',tiles[i],'_',year,' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
+      system(paste('qsub -N NB2',tiles[i],'_',year,' -hold_jid NB4',tiles[i],'_2024',' -V -pe omp 2 -l h_rt=12:00:00 /projectnb/modislc/users/seamorez/mcd12q2_at/run_nbara2.sh ', tiles[i],year,sep=''))
     }
     # Else, hold until previous job complete (this is slower than the old method, but it doesn't 
     # overwhelm the server. This way, usually no downloads are skipped.)
@@ -39,7 +39,7 @@ for(i in seq(length(tiles))){
 }
 
 
-tiles <- c('h11v02', 'h12v02')  # After downloading, we can run tasks in parallel for all tiles
+tiles <- c('h06v03','h07v03','h09v02')  # After downloading, we can run change folders in parallel for all tiles
 
 # Run "change_folder_name.R" code
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/')
@@ -49,14 +49,15 @@ for(i in seq(length(tiles))){
   }
 }
 
+
 # Run spline code 
-# tiles <- c('h10v02')
+tiles <- c('h06v03')  # Let's run this by tile since this is a huge task
 
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/')
 for(i in seq(length(tiles))){
   #Create output directory if it doesn't exist
-  for(start_yr in 2000:2022){
-    outDir <- paste0('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/',tiles[i],'/',(start_yr+1))
+  for(start_yr in 1999:2022){
+    outDir <- paste0('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/',tiles[i])
     if (!dir.exists(outDir)) {dir.create(outDir)}
     system(paste('qsub /projectnb/modislc/users/seamorez/mcd12q2_at/run_spline_fromJosh.sh ', tiles[i],' ',start_yr,sep=''))    
   }
@@ -65,10 +66,10 @@ for(i in seq(length(tiles))){
 
 # To see splined results
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/log/')
-for(i in seq(length(tiles))){
-  for(year in 2022:2023){
+for(i in seq(length(tiles[1]))){
+  for(year in 2016:2023){
     for(j in 0:0){
-      system(paste('qsub -N ck_sp -V -pe omp 4 -l h_rt=03:00:00 -l mem_total=32G /projectnb/modislc/users/seamorez/mcd12q2_at/run_ck_spline.sh ',tiles[i],year,j,sep=''))  
+      system(paste('qsub -N ck_sp -V -pe omp 4 -l h_rt=03:00:00 -l mem_total=32G /projectnb/modislc/users/seamorez/mcd12q2_at/run_ck_spline.sh ',tiles[1],year,j,sep=''))  
     }
   }  
 }
