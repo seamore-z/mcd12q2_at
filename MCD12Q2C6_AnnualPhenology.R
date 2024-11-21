@@ -71,7 +71,7 @@ arg_parser$add_argument("-pheno_period_end", type="character")
 arg_parser$add_argument("-out_dir", type="character", default="/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/pheno") # output directory
 arg_parser$add_argument("-out_prefix", type="character", default="MCD12Q2C61") # prefix for output files
 arg_parser$add_argument("-data_dir", type="character", default="/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline") # input binary splined evi data directory
-arg_parser$add_argument("-data_prefix", type="character", default="sz_v5") # prefix of input binary files
+arg_parser$add_argument("-data_prefix", type="character", default="sz_v7") # prefix of input binary files
 arg_parser$add_argument("-params", type="character") # phenology processing parameters file
 arg_parser$add_argument("-chunk_line_size", type="integer", default=480) # lines to process at once; consider memory; default does tile in 5 equal chunks; NOTE: limited to factors of 2400
 arg_parser$add_argument("-cluster_size", type="integer", default=16) # number of CPU cores to use for processing
