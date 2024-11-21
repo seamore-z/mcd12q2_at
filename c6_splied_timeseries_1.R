@@ -26,11 +26,12 @@ rast_obj <- rast(files[1])
 subdatasets <- names(rast_obj)
 test <- raster(rast_obj[subdatasets[1]])
 
-# x <- -166.376788; y_orig <- 64.919067 # 64.919067,-166.376788 # shrubby pixel for test #1
-# x <- -164.056401; y_orig <- 62.531442 # 62.531442,-164.056401 # veg pixel for test #2: default EVImin pixel 1
-# x <- -164.939950; y_orig <- 64.556637 # 64.556637,-164.939950 # veg+water pixel for test #2: default EVImin pixel 2
-# x <- -161.412684; y_orig <- 60.919210 # 60.919210,-161.412684 # shrubby pixel for test #2: default EVImin pixel 3
-x <- -164.405038; y_orig <- 61.306337 # 61.306337,-164.405038 # a lot of water pixel for test #2: default EVImin pixel 4
+# x <- -166.376788; y_orig <- 64.919067 # 64.919067,-166.376788 # shrubby pixel for test #1, tile h10v02
+# x <- -164.056401; y_orig <- 62.531442 # 62.531442,-164.056401 # veg pixel for test #2: default EVImin pixel 1, tile h10v02
+# x <- -164.939950; y_orig <- 64.556637 # 64.556637,-164.939950 # veg+water pixel for test #2: default EVImin pixel 2, tile h10v02
+# x <- -161.412684; y_orig <- 60.919210 # 60.919210,-161.412684 # shrubby pixel for test #2: default EVImin pixel 3, tile h10v02
+# x <- -164.405038; y_orig <- 61.306337 # 61.306337,-164.405038 # a lot of water pixel for test #2: default EVImin pixel 4, tile h10v02
+x <- -148.508625; y_orig <- 69.406590 # 69.406590,-148.508625 # veg pixel for test #3, tile h12v02
 points <- cbind(x,y_orig)
 v <- SpatialPoints(points, proj4string = CRS("+proj=longlat +datum=WGS84"))
 y <- spTransform(v, CRS("+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +R=6371007.181 +units=m +no_defs"))
@@ -47,7 +48,7 @@ nrow <- 2400
 nbands <- 365
 cnt <- ncol*nrow*nbands
 
-data <- readBin(paste('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/',tile,'/sz_v5.',tile,'.',as.character(year),'.evi2.bip',sep=''),
+data <- readBin(paste('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/',tile,'/sz_v7.',tile,'.',as.character(year),'.evi2.bip',sep=''),
                 what="integer",n=cnt,size=2,endian="little")
 data <- array(data,c(nbands, ncol, nrow))
 data <- aperm(data, c(3,2,1)) #for transposing
@@ -84,7 +85,7 @@ for(i in 1:365){
 
 
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/spline_test/')
-png(file=paste('d_sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'.png',sep=''),res=300,units='in',width=13.5,height=6.5)
+png(file=paste('sz_v7_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'.png',sep=''),res=300,units='in',width=13.5,height=6.5)
 par(oma=c(1,1,1,1),mar=c(4,4,0,0))
 plot(splined[,1]/10000,ylim=c(-0.2,0.8),
      xlab='Date',ylab='EVI2',lwd=1.5,
@@ -93,7 +94,7 @@ points(evi_mm,col='red',cex=.5)
 dev.off()
 
 setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/spline_test/')
-png(file=paste('d_sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'_ndsi','.png',sep=''),res=300,units='in',width=13.5,height=6.5)
+png(file=paste('sz_v7_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'_ndsi','.png',sep=''),res=300,units='in',width=13.5,height=6.5)
 par(oma=c(1,1,1,1),mar=c(4,4,0,0))
 plot(splined[,1]/10000,ylim=c(-0.8,1.1),
      xlab='Date',ylab='NDSI',lwd=1.5,
@@ -131,7 +132,7 @@ dev.off()
 # xSmooth <- predict(spl, as.numeric(pred_dates))$y
 # 
 # setwd('/projectnb/modislc/users/seamorez/HLS_Pheno/modis_data/MCD43A4/data/spline/spline_test/')
-# png(file=paste('sz_v5_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'_tspine','.png',sep=''),res=300,units='in',width=13.5,height=6.5)
+# png(file=paste('sz_v7_',as.character(year),'_',as.character(x),'_',as.character(y_orig),'_tspine','.png',sep=''),res=300,units='in',width=13.5,height=6.5)
 # par(oma=c(1,1,1,1),mar=c(4,4,0,0))
 # plot(pred_dates, xSmooth,ylim=c(0,0.8),
 #      xlab='Date',ylab='EVI2',lwd=1.5,
