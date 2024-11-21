@@ -16,9 +16,9 @@ DefaultPhenoParameters <- function(){
 
 	pheno_pars <- list(
 		## valid segment definition ##
-		min_seg_amplitude=0.1, # absolute amplitude threshold
+		min_seg_amplitude=0.08, # absolute amplitude threshold
 		min_increase_length=30,
-		max_increase_length=120,
+		max_increase_length=100,
 		min_decrease_length=30,
 		max_decrease_length=120,
 		rel_amp_frac=0.35, # segment amplitude must be >= rel_amp_frac * global_amp (max - min)
